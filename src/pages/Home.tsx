@@ -1,9 +1,39 @@
 import ToolBar from "@/components/ToolBar";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Room from "@/components/Room";
+import RoomList from "@/components/RoomList";
 
 function Home() {
+	const rooms = [
+		{
+			id: "1",
+			title: "General Chat",
+			creator: "Alice",
+			numberOfParticipants: 5,
+			createdAt: new Date("2024-06-20T10:00:00Z"),
+		},
+		{
+			id: "2",
+			title: "Tech Talk",
+			creator: "Bob",
+			numberOfParticipants: 3,
+			createdAt: new Date("2024-06-21T12:30:00Z"),
+		},
+		{
+			id: "3",
+			title: "Gaming Discussion",
+			creator: "Charlie",
+			numberOfParticipants: 8,
+			createdAt: new Date("2024-06-22T09:15:00Z"),
+		},
+		{
+			id: "4",
+			title: "Music Discussion",
+			creator: "Dave",
+			numberOfParticipants: 6,
+			createdAt: new Date("2024-06-23T11:45:00Z"),
+		},
+	];
 	return (
 		<div className="min-h-screen container mx-auto flex flex-col">
 			<Header />
@@ -14,24 +44,7 @@ function Home() {
 				No Sign-Up. Just Start Talking.
 			</p>
 			<ToolBar />
-			<Room
-				title="Random Chat Room"
-				creator="John Doe"
-				numberOfParticipants={10}
-				createdAt={new Date()}
-			/>
-			<Room
-				title="Random Chat Room"
-				creator="John Doe"
-				numberOfParticipants={10}
-				createdAt={new Date()}
-			/>
-			<Room
-				title="Random Chat Room"
-				creator="John Doe"
-				numberOfParticipants={10}
-				createdAt={new Date()}
-			/>
+			<RoomList rooms={rooms} />
 			<Footer />
 		</div>
 	);
