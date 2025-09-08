@@ -14,7 +14,7 @@ function ToolBar() {
 
 	return (
 		<div className="flex mt-10 gap-4">
-			<Button className="bg-blue-500 hover:bg-blue-600 text-white">
+			<Button>
 				<Plus />
 				Create a Room
 			</Button>
@@ -39,7 +39,6 @@ function ToolBar() {
 						<Button
 							type="submit"
 							size="icon"
-							className="bg-blue-500 hover:bg-blue-600"
 						>
 							<Search className="h-4 w-4" />
 						</Button>

@@ -123,3 +123,8 @@ body {
 		@apply bg-background text-foreground;
 	}
 }
+
+@theme {
+	--color-primary: var(--color-blue-500);
+	--color-primary-foreground: #ffffff;
+}

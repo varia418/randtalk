@@ -33,7 +33,7 @@ function ChatRoom({ title, creator, numberOfParticipants, createdAt }: Room) {
 				</div>
 			</CardContent>
 			<CardFooter className="mt-4">
-				<Button className="bg-blue-500 hover:bg-blue-600 text-white">
+				<Button>
 					<LogIn />
 					Join Room
 				</Button>

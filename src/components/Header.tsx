@@ -29,8 +29,8 @@ function Header({
 				<DropdownMenuTrigger asChild>
 					<div className="flex gap-1 cursor-pointer">
 						<span>Welcome, </span>
-						<span className="text-blue-500">{username}</span>
-						<ChevronDown className="text-blue-500" />
+						<span className="text-primary">{username}</span>
+						<ChevronDown className="text-primary" />
 					</div>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent className="w-56">
