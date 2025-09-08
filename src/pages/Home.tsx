@@ -1,16 +1,23 @@
 import ToolBar from "@/components/ToolBar";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import RoomList from "@/components/RoomList";
+import UsernameDialog from "@/components/UsernameDialog";
+import { useState } from "react";
 
 function Home() {
+	const [usernameDialogOpen, setUsernameDialogOpen] = useState(() => {
+		const username = sessionStorage.getItem("username");
+		return !username;
+	});
+
 	const rooms = [
 		{
 			id: "1",
 			title: "General Chat",
 			creator: "Alice",
 			numberOfParticipants: 5,
-			createdAt: new Date("2024-06-20T10:00:00Z"),
+			createdAt: new Date(),
 		},
 		{
 			id: "2",
@@ -46,6 +53,10 @@ function Home() {
 			<ToolBar />
 			<RoomList rooms={rooms} />
 			<Footer />
+			<UsernameDialog
+				open={usernameDialogOpen}
+				setOpen={setUsernameDialogOpen}
+			/>
 		</div>
 	);
 }
