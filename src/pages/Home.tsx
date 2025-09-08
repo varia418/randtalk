@@ -1,6 +1,7 @@
 import ToolBar from "@/components/ToolBar";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import Room from "@/components/Room";
 
 function Home() {
 	return (
@@ -13,6 +14,24 @@ function Home() {
 				No Sign-Up. Just Start Talking.
 			</p>
 			<ToolBar />
+			<Room
+				title="Random Chat Room"
+				creator="John Doe"
+				numberOfParticipants={10}
+				createdAt={new Date()}
+			/>
+			<Room
+				title="Random Chat Room"
+				creator="John Doe"
+				numberOfParticipants={10}
+				createdAt={new Date()}
+			/>
+			<Room
+				title="Random Chat Room"
+				creator="John Doe"
+				numberOfParticipants={10}
+				createdAt={new Date()}
+			/>
 			<Footer />
 		</div>
 	);
