@@ -8,20 +8,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Clock, LogIn, User, Users } from "lucide-react";
 import TimeAgo from "react-timeago";
+import type { Room } from "@/types";
 
-function Room({
-	title,
-	creator,
-	numberOfParticipants,
-	createdAt,
-}: {
-	title: string;
-	creator: string;
-	numberOfParticipants: number;
-	createdAt: Date;
-}) {
+function ChatRoom({ title, creator, numberOfParticipants, createdAt }: Room) {
 	return (
-		<Card className="w-full max-w-md gap-1">
+		<Card className="gap-0">
 			<CardHeader>
 				<CardTitle className="text-2xl">{title}</CardTitle>
 			</CardHeader>
@@ -51,4 +42,4 @@ function Room({
 	);
 }
 
-export default Room;
+export default ChatRoom;
