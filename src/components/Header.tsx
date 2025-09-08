@@ -2,7 +2,7 @@ import { NavLink } from "react-router";
 
 function Header() {
 	return (
-		<div className="flex justify-between p-4 bg-gray-800 text-white">
+		<div className="flex justify-between p-4 text-white">
 			<NavLink to="/" end>
 				<div className="flex items-center space-x-2">
 					<img src="/logo.png" className="h-8" alt="randtalk-logo" />
