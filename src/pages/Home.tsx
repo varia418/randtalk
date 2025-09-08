@@ -7,6 +7,7 @@ import { useState } from "react";
 
 function Home() {
 	const [usernameDialogOpen, setUsernameDialogOpen] = useState(() => {
+		// open dialog if username is not existed
 		const username = sessionStorage.getItem("username");
 		return !username;
 	});
@@ -43,7 +44,7 @@ function Home() {
 	];
 	return (
 		<div className="min-h-screen container mx-auto flex flex-col">
-			<Header />
+			<Header setUsernameDialogOpen={setUsernameDialogOpen} />
 			<h1 className="text-6xl font-bold text-center text-blue-500 mt-20 mb-6">
 				Say Hi to Someone New
 			</h1>
