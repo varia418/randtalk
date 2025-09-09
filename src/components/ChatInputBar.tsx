@@ -43,7 +43,7 @@ function ChatInputBar() {
 					onSubmit={form.handleSubmit(onSubmit)}
 					className="flex flex-row items-start gap-2"
 				>
-					<Button variant="outline">
+					<Button variant="outline" size="icon">
 						<FileUp />
 					</Button>
 					<FormField
@@ -64,7 +64,7 @@ function ChatInputBar() {
 									onOpenChange={setIsEmojiPickerOpen}
 								>
 									<PopoverTrigger asChild>
-										<Button variant="outline">
+										<Button variant="outline" size="icon">
 											<Smile />
 										</Button>
 									</PopoverTrigger>
@@ -94,7 +94,7 @@ function ChatInputBar() {
 							</FormItem>
 						)}
 					/>
-					<Button type="submit">
+					<Button size="icon" type="submit">
 						<SendHorizontal />
 					</Button>
 				</form>

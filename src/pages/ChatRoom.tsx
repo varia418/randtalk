@@ -1,10 +1,18 @@
 import ChatInputBar from "@/components/ChatInputBar";
 import ChatMessage from "@/components/ChatMessage";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { Button } from "@/components/ui/button";
 import UserList from "@/components/UserList";
 import type { Message } from "@/types";
+import { LogOut, Mic, MicOff, Video, VideoOff } from "lucide-react";
+import { useState } from "react";
 import { useLoaderData } from "react-router";
 
 function ChatRoom() {
+	const [isMuted, setIsMuted] = useState(false);
+	const [isVideoOff, setIsVideoOff] = useState(false);
+	const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
+		useState(false);
 	const { room, users, messages } = useLoaderData();
 	const cameras = ["Camera 1", "Camera 2", "Camera 3"];
 
@@ -46,7 +54,35 @@ function ChatRoom() {
 			<div className="border p-2">
 				<ChatInputBar />
 			</div>
-			<div className="border">controls</div>
+			<div className="border">
+				<div className="flex items-center justify-center gap-2 p-2">
+					<Button
+						size="icon"
+						variant={"outline"}
+						onClick={() => setIsMuted(!isMuted)}
+					>
+						{isMuted ? <MicOff /> : <Mic />}
+					</Button>
+					<Button
+						size="icon"
+						variant={"outline"}
+						onClick={() => setIsVideoOff(!isVideoOff)}
+					>
+						{isVideoOff ? <VideoOff /> : <Video />}
+					</Button>
+					<Button
+						size="icon"
+						variant={"destructive"}
+						onClick={() => setIsConfirmationDialogOpen(true)}
+					>
+						<LogOut />
+					</Button>
+				</div>
+			</div>
+			<ConfirmationDialog
+				open={isConfirmationDialogOpen}
+				setOpen={setIsConfirmationDialogOpen}
+			/>
 		</div>
 	);
 }
