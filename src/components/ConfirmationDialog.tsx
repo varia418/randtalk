@@ -1,3 +1,4 @@
+import { NavLink } from "react-router";
 import { Button } from "./ui/button";
 import {
 	Dialog,
@@ -29,7 +30,9 @@ function ConfirmationDialog({
 					<DialogClose asChild>
 						<Button variant="outline">Cancel</Button>
 					</DialogClose>
-					<Button variant="destructive">Leave</Button>
+					<NavLink to="/">
+						<Button variant="destructive">Leave</Button>
+					</NavLink>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
