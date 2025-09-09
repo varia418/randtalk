@@ -8,7 +8,7 @@ export const router = createBrowserRouter([
 	{
 		path: "/room/:roomId",
 		loader: async () => {
-			await new Promise((resolve) => setTimeout(resolve, 3000));
+			await new Promise((resolve) => setTimeout(resolve, 500));
 			return {
 				room: {
 					id: "1",
