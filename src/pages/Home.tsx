@@ -5,6 +5,8 @@ import RoomList from "@/components/RoomList";
 import UsernameDialog from "@/components/UsernameDialog";
 import { useState } from "react";
 import CreateRoomDialog from "@/components/CreateRoomDialog";
+import { useNavigation } from "react-router";
+import GlobalSpinner from "@/components/GlobalSpinner";
 
 function Home() {
 	const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(() => {
@@ -13,6 +15,11 @@ function Home() {
 		return !username;
 	});
 	const [createRoomDialogOpen, setCreateRoomDialogOpen] = useState(false);
+
+	const navigation = useNavigation();
+	const isNavigating = Boolean(navigation.location);
+
+    if (isNavigating) return <GlobalSpinner />;
 
 	const rooms = [
 		{
