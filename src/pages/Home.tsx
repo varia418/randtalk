@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import RoomList from "@/components/RoomList";
 import UsernameDialog from "@/components/UsernameDialog";
 import { useState } from "react";
+import CreateRoomDialog from "@/components/CreateRoomDialog";
 
 function Home() {
 	const [usernameDialogOpen, setUsernameDialogOpen] = useState(() => {
@@ -11,6 +12,7 @@ function Home() {
 		const username = sessionStorage.getItem("username");
 		return !username;
 	});
+	const [createRoomDialogOpen, setCreateRoomDialogOpen] = useState(false);
 
 	const rooms = [
 		{
@@ -51,12 +53,16 @@ function Home() {
 			<p className="text-center text-xl">
 				No Sign-Up. Just Start Talking.
 			</p>
-			<ToolBar />
+			<ToolBar setCreateRoomDialogOpen={setCreateRoomDialogOpen} />
 			<RoomList rooms={rooms} />
 			<Footer />
 			<UsernameDialog
 				open={usernameDialogOpen}
 				setOpen={setUsernameDialogOpen}
+			/>
+			<CreateRoomDialog
+				open={createRoomDialogOpen}
+				setOpen={setCreateRoomDialogOpen}
 			/>
 		</div>
 	);

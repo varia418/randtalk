@@ -9,12 +9,16 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 
-function ToolBar() {
+function ToolBar({
+	setCreateRoomDialogOpen,
+}: {
+	setCreateRoomDialogOpen: (open: boolean) => void;
+}) {
 	const [sorting, setSorting] = useState("most-recent");
 
 	return (
 		<div className="flex mt-10 gap-4">
-			<Button>
+			<Button onClick={() => setCreateRoomDialogOpen(true)}>
 				<Plus />
 				Create a Room
 			</Button>
