@@ -7,6 +7,15 @@ export interface Room {
 }
 
 export interface User {
-    id: number;
-    name: string;
+	id: string;
+	displayName: string;
+	roomId?: string;
+}
+
+export interface Message {
+	id: string;
+	content: string;
+	sender: string;
+	roomId: string;
+	createdAt: Date;
 }
