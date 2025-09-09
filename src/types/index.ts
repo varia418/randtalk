@@ -5,3 +5,8 @@ export interface Room {
 	numberOfParticipants: number;
 	createdAt: Date;
 }
+
+export interface User {
+    id: number;
+    name: string;
+}
