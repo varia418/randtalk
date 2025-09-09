@@ -19,7 +19,7 @@ function Home() {
 	const navigation = useNavigation();
 	const isNavigating = Boolean(navigation.location);
 
-    if (isNavigating) return <GlobalSpinner />;
+	if (isNavigating) return <GlobalSpinner />;
 
 	const rooms = [
 		{
@@ -52,25 +52,27 @@ function Home() {
 		},
 	];
 	return (
-		<div className="min-h-screen container mx-auto flex flex-col">
-			<Header setIsUsernameDialogOpen={setIsUsernameDialogOpen} />
-			<h1 className="text-6xl font-bold text-center text-primary mt-20 mb-6">
-				Say Hi to Someone New
-			</h1>
-			<p className="text-center text-xl">
-				No Sign-Up. Just Start Talking.
-			</p>
-			<ToolBar setCreateRoomDialogOpen={setCreateRoomDialogOpen} />
-			<RoomList rooms={rooms} />
-			<Footer />
-			<UsernameDialog
-				open={isUsernameDialogOpen}
-				setOpen={setIsUsernameDialogOpen}
-			/>
-			<CreateRoomDialog
-				open={createRoomDialogOpen}
-				setOpen={setCreateRoomDialogOpen}
-			/>
+		<div className="background-pattern">
+			<div className="container mx-auto flex flex-col min-h-screen">
+				<Header setIsUsernameDialogOpen={setIsUsernameDialogOpen} />
+				<h1 className="text-6xl font-bold text-center text-primary mt-20 mb-6">
+					Say Hi to Someone New
+				</h1>
+				<p className="text-center text-xl">
+					No Sign-Up. Just Start Talking.
+				</p>
+				<ToolBar setCreateRoomDialogOpen={setCreateRoomDialogOpen} />
+				<RoomList rooms={rooms} />
+				<Footer />
+				<UsernameDialog
+					open={isUsernameDialogOpen}
+					setOpen={setIsUsernameDialogOpen}
+				/>
+				<CreateRoomDialog
+					open={createRoomDialogOpen}
+					setOpen={setCreateRoomDialogOpen}
+				/>
+			</div>
 		</div>
 	);
 }
