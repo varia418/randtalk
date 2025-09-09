@@ -24,18 +24,18 @@ export const router = createBrowserRouter([
 			];
 			const messages: Message[] = [
 				{
-					id: "1",
-					content: "Hello, world!",
-					sender: "varia",
-					roomId: "1",
-					createdAt: new Date(new Date().getTime() + 60000),
-				},
-				{
 					id: "2",
 					content: "Hello, again!",
 					sender: "ruben",
 					roomId: "1",
 					createdAt: new Date(),
+				},
+				{
+					id: "1",
+					content: "Hello, world!",
+					sender: "varia",
+					roomId: "1",
+					createdAt: new Date(new Date().getTime() - 60000),
 				},
 			];
 			return {
