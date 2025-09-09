@@ -9,8 +9,15 @@ import { Button } from "@/components/ui/button";
 import { Clock, LogIn, User, Users } from "lucide-react";
 import TimeAgo from "react-timeago";
 import type { Room } from "@/types";
+import { NavLink } from "react-router";
 
-function ChatRoom({ title, creator, numberOfParticipants, createdAt }: Room) {
+function ChatRoom({
+	id,
+	title,
+	creator,
+	numberOfParticipants,
+	createdAt,
+}: Room) {
 	return (
 		<Card className="gap-0">
 			<CardHeader>
@@ -33,10 +40,12 @@ function ChatRoom({ title, creator, numberOfParticipants, createdAt }: Room) {
 				</div>
 			</CardContent>
 			<CardFooter className="mt-4">
-				<Button>
-					<LogIn />
-					Join Room
-				</Button>
+				<NavLink to={`/room/${id}`} end>
+					<Button>
+						<LogIn />
+						Join Room
+					</Button>
+				</NavLink>
 			</CardFooter>
 		</Card>
 	);
