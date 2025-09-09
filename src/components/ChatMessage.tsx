@@ -1,6 +1,6 @@
-import type { Message } from "@/types";
+import type { Tables } from "@/types/database.types";
 
-function ChatMessage({ content, sender, createdAt }: Message) {
+function ChatMessage({ content, sender, createdAt }: Tables<"messages">) {
 	return (
 		<div className="px-2">
 			<div className="flex gap-2 items-baseline">

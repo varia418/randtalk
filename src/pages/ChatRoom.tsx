@@ -3,18 +3,26 @@ import ChatMessage from "@/components/ChatMessage";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import UserList from "@/components/UserList";
-import type { Message } from "@/types";
 import { LogOut, Mic, MicOff, Video, VideoOff } from "lucide-react";
 import { useState } from "react";
 import { useLoaderData } from "react-router";
+import { type Tables } from "@/types/database.types";
+
+type LoaderData = {
+	room: Tables<"chat_rooms"> | null;
+	users: Tables<"users">[];
+	messages: Tables<"messages">[];
+};
 
 function ChatRoom() {
 	const [isMuted, setIsMuted] = useState(false);
 	const [isVideoOff, setIsVideoOff] = useState(false);
 	const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
 		useState(false);
-	const { room, users, messages } = useLoaderData();
+	const { room, users, messages } = useLoaderData() as LoaderData;
 	const cameras = ["Camera 1", "Camera 2", "Camera 3"];
+
+	if (!room) return null;
 
 	return (
 		<div className="h-screen grid grid-rows-[50px_minmax(300px,1fr)_fit-content(0)] grid-cols-[200px_minmax(400px,1fr)_400px]">
@@ -22,9 +30,7 @@ function ChatRoom() {
 				<h1 className="text-2xl truncate">User List</h1>
 			</div>
 			<div className="border px-2 flex items-center min-w-0">
-				<h1 className="text-2xl truncate">
-					{room.title} (ID: {room.id})
-				</h1>
+				<h1 className="text-2xl truncate">{room.title}</h1>
 			</div>
 			<div className="border px-2 flex items-center">
 				<h1 className="text-2xl truncate">Cameras</h1>
@@ -34,7 +40,7 @@ function ChatRoom() {
 			</div>
 			<div className="border pb-2">
 				<ul className="flex flex-col-reverse overflow-auto h-full">
-					{messages.map((message: Message) => (
+					{messages.map((message: Tables<"messages">) => (
 						<ChatMessage key={message.id} {...message} />
 					))}
 				</ul>
