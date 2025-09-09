@@ -12,6 +12,8 @@ import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import supabase from "@/utils/supabase";
+import { v4 as uuidv4 } from "uuid";
 
 const formSchema = z.object({
 	username: z.string().trim().min(2, {
@@ -33,20 +35,44 @@ function UsernameDialog({
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
+	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const username = values.username.trim();
-		sessionStorage.setItem("username", username);
+		const user = JSON.parse(sessionStorage.getItem("user") || "null");
+
+		let result;
+		if (!user) {
+			// create a user
+			const user = { id: uuidv4(), displayName: username };
+			result = await supabase.from("users").insert(user).select().single();
+		} else {
+			// update existing user
+			result = await supabase
+				.from("users")
+				.upsert({ id: user.id, displayName: username })
+				.select()
+				.single();
+		}
+
+        console.log(result);
+
+		if (!result.error) {
+			sessionStorage.setItem("user", JSON.stringify(result.data));
+		} else {
+			console.log(result.error);
+			alert(result.error.message);
+		}
+
 		setOpen(false);
 	}
 
 	function handleOpenChange(open: boolean) {
 		console.log(open);
 		if (!open) {
-			const username = sessionStorage.getItem("username");
+			const user = JSON.parse(sessionStorage.getItem("user") || "null");
+			const username = user?.displayName;
 			try {
 				formSchema.parse({ username });
 			} catch {
-				console.log("here");
 				alert("You must set a valid username to proceed.");
 				return;
 			}
@@ -81,10 +107,7 @@ function UsernameDialog({
 								</FormItem>
 							)}
 						/>
-						<Button
-							type="submit"
-							className="w-full"
-						>
+						<Button type="submit" className="w-full">
 							Save
 						</Button>
 					</form>

@@ -12,7 +12,7 @@ function Header({
 }: {
 	setIsUsernameDialogOpen: (open: boolean) => void;
 }) {
-	const username = sessionStorage.getItem("username") || "User";
+	const user = JSON.parse(sessionStorage.getItem("user") || "null");
 
 	const openUsernameDialog = () => {
 		setIsUsernameDialogOpen(true);
@@ -29,7 +29,9 @@ function Header({
 				<DropdownMenuTrigger asChild>
 					<div className="flex gap-1 cursor-pointer">
 						<span>Welcome, </span>
-						<span className="text-primary">{username}</span>
+						<span className="text-primary">
+							{user?.displayName || "User"}
+						</span>
 						<ChevronDown className="text-primary" />
 					</div>
 				</DropdownMenuTrigger>

@@ -11,8 +11,8 @@ import GlobalSpinner from "@/components/GlobalSpinner";
 function Home() {
 	const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(() => {
 		// open dialog if username is not existed
-		const username = sessionStorage.getItem("username");
-		return !username;
+		const user = JSON.parse(sessionStorage.getItem("user") || "null");
+		return !user;
 	});
 	const [createRoomDialogOpen, setCreateRoomDialogOpen] = useState(false);
 
