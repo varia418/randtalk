@@ -1,8 +1,10 @@
 import UserList from "@/components/UserList";
-import { useParams } from "react-router";
+import { useLoaderData } from "react-router";
 
 function ChatRoom() {
-	const { roomId } = useParams();
+	const { room } = useLoaderData();
+	console.log("🚀 ~ ChatRoom ~ room:", room);
+
 	const users = [
 		{ id: 1, name: "varia" },
 		{ id: 2, name: "ruben" },
@@ -15,8 +17,7 @@ function ChatRoom() {
 			</div>
 			<div className="border px-2 flex items-center min-w-0">
 				<h1 className="text-2xl truncate">
-					GOTY
-					watchalongggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
+					{room.title} (ID: {room.id})
 				</h1>
 			</div>
 			<div className="border px-2 flex items-center">
