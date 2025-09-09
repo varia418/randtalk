@@ -7,7 +7,7 @@ import { useState } from "react";
 import CreateRoomDialog from "@/components/CreateRoomDialog";
 
 function Home() {
-	const [usernameDialogOpen, setUsernameDialogOpen] = useState(() => {
+	const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(() => {
 		// open dialog if username is not existed
 		const username = sessionStorage.getItem("username");
 		return !username;
@@ -46,7 +46,7 @@ function Home() {
 	];
 	return (
 		<div className="min-h-screen container mx-auto flex flex-col">
-			<Header setUsernameDialogOpen={setUsernameDialogOpen} />
+			<Header setIsUsernameDialogOpen={setIsUsernameDialogOpen} />
 			<h1 className="text-6xl font-bold text-center text-primary mt-20 mb-6">
 				Say Hi to Someone New
 			</h1>
@@ -57,8 +57,8 @@ function Home() {
 			<RoomList rooms={rooms} />
 			<Footer />
 			<UsernameDialog
-				open={usernameDialogOpen}
-				setOpen={setUsernameDialogOpen}
+				open={isUsernameDialogOpen}
+				setOpen={setIsUsernameDialogOpen}
 			/>
 			<CreateRoomDialog
 				open={createRoomDialogOpen}

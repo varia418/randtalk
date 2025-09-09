@@ -8,14 +8,14 @@ import {
 import { ChevronDown } from "lucide-react";
 
 function Header({
-	setUsernameDialogOpen,
+	setIsUsernameDialogOpen,
 }: {
-	setUsernameDialogOpen: (open: boolean) => void;
+	setIsUsernameDialogOpen: (open: boolean) => void;
 }) {
 	const username = sessionStorage.getItem("username") || "User";
 
 	const openUsernameDialog = () => {
-		setUsernameDialogOpen(true);
+		setIsUsernameDialogOpen(true);
 	};
 	return (
 		<div className="flex justify-between p-4 text-white">
