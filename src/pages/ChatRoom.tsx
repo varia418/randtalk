@@ -3,13 +3,22 @@ import { useParams } from "react-router";
 function ChatRoom() {
 	const { roomId } = useParams();
 	return (
-		<div className="min-h-screen grid grid-rows-[50px_1fr_100px] grid-cols-[200px_1fr_500px]">
-			<div className="border">User List</div>
-			<div className="border">GOTY watchalong</div>
-			<div className="border">Cameras</div>
+		<div className="min-h-screen grid grid-rows-[50px_minmax(300px,1fr)_100px] grid-cols-[200px_minmax(500px,1fr)_500px]">
+			<div className="border px-2 flex items-center">
+				<h1 className="text-2xl truncate">User List</h1>
+			</div>
+			<div className="border px-2 flex items-center min-w-0">
+				<h1 className="text-2xl truncate">
+					GOTY
+					watchalongggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
+				</h1>
+			</div>
+			<div className="border px-2 flex items-center">
+				<h1 className="text-2xl truncate">Cameras</h1>
+			</div>
 			<div className="border row-span-2">
 				<ul>
-					<li>varia</li>
+					<li className="truncate">varia</li>
 					<li>ruben</li>
 					<li>noah</li>
 				</ul>
