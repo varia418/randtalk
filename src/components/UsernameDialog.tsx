@@ -14,6 +14,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import supabase from "@/utils/supabase";
 import { v4 as uuidv4 } from "uuid";
+import { SESSION_KEYS, TABLES } from "@/constants";
 
 const formSchema = z.object({
 	username: z.string().trim().min(2, {
@@ -37,26 +38,32 @@ function UsernameDialog({
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const username = values.username.trim();
-		const user = JSON.parse(sessionStorage.getItem("user") || "null");
+		const user = JSON.parse(
+			sessionStorage.getItem(SESSION_KEYS.user) || "null"
+		);
 
 		let result;
 		if (!user) {
 			// create a user
 			const user = { id: uuidv4(), displayName: username };
-			result = await supabase.from("users").insert(user).select().single();
+			result = await supabase
+				.from(TABLES.users)
+				.insert(user)
+				.select()
+				.single();
 		} else {
 			// update existing user
 			result = await supabase
-				.from("users")
+				.from(TABLES.users)
 				.upsert({ id: user.id, displayName: username })
 				.select()
 				.single();
 		}
 
-        console.log(result);
+		console.log(result);
 
 		if (!result.error) {
-			sessionStorage.setItem("user", JSON.stringify(result.data));
+			sessionStorage.setItem(SESSION_KEYS.user, JSON.stringify(result.data));
 		} else {
 			console.log(result.error);
 			alert(result.error.message);
@@ -68,7 +75,7 @@ function UsernameDialog({
 	function handleOpenChange(open: boolean) {
 		console.log(open);
 		if (!open) {
-			const user = JSON.parse(sessionStorage.getItem("user") || "null");
+			const user = JSON.parse(sessionStorage.getItem(SESSION_KEYS.user) || "null");
 			const username = user?.displayName;
 			try {
 				formSchema.parse({ username });

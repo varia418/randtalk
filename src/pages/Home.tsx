@@ -7,11 +7,14 @@ import { useState } from "react";
 import CreateRoomDialog from "@/components/CreateRoomDialog";
 import { useNavigation } from "react-router";
 import GlobalSpinner from "@/components/GlobalSpinner";
+import { SESSION_KEYS } from "@/constants";
 
 function Home() {
 	const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(() => {
 		// open dialog if username is not existed
-		const user = JSON.parse(sessionStorage.getItem("user") || "null");
+		const user = JSON.parse(
+			sessionStorage.getItem(SESSION_KEYS.user) || "null"
+		);
 		return !user;
 	});
 	const [createRoomDialogOpen, setCreateRoomDialogOpen] = useState(false);

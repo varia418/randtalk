@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import ChatRoom from "./pages/ChatRoom";
 import GlobalSpinner from "./components/GlobalSpinner";
 import supabase from "./utils/supabase";
+import { TABLES } from "./constants";
 
 export const router = createBrowserRouter([
 	{ path: "/", Component: Home },
@@ -20,21 +21,21 @@ export const router = createBrowserRouter([
 			}
 
 			const { data: room } = await supabase
-				.from("chat_rooms")
+				.from(TABLES.rooms)
 				.select()
 				.eq("id", params.roomId)
 				.single();
 
 			const { data: users } = await supabase
-				.from("users")
+				.from(TABLES.users)
 				.select()
-				.eq("room_id", params.roomId);
+				.eq("roomId", params.roomId);
 
 			const { data: messages } = await supabase
-				.from("messages")
+				.from(TABLES.messages)
 				.select()
-				.eq("room_id", params.roomId)
-				.order("created_at", { ascending: false });
+				.eq("roomId", params.roomId)
+				.order("createdAt", { ascending: false });
 
 			return {
 				room,
