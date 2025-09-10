@@ -18,6 +18,7 @@ import supabase from "@/utils/supabase";
 import { TABLES } from "@/constants";
 import { v4 as uuidv4 } from "uuid";
 import type { Room } from "@/types";
+import { useRevalidator } from "react-router";
 
 const formSchema = z.object({
 	message: z
@@ -30,6 +31,7 @@ const formSchema = z.object({
 function ChatInputBar({ room }: { room: Room }) {
 	const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 	const { user } = useContext(UserContext);
+	const revalidator = useRevalidator();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -56,6 +58,7 @@ function ChatInputBar({ room }: { room: Room }) {
 		} else {
 			console.log("Message sent:", data);
 			form.reset();
+			revalidator.revalidate();
 		}
 	}
 
