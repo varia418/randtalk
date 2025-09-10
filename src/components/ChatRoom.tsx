@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Clock, LogIn, User, Users } from "lucide-react";
 import TimeAgo from "react-timeago";
-import type { Room } from "@/types";
+import type { RoomWithParticipantsCount } from "@/types";
 import { NavLink } from "react-router";
 
 function ChatRoom({
@@ -17,7 +17,7 @@ function ChatRoom({
 	creator,
 	numberOfParticipants,
 	createdAt,
-}: Room) {
+}: RoomWithParticipantsCount) {
 	return (
 		<Card className="gap-0">
 			<CardHeader>

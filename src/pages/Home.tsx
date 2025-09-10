@@ -5,51 +5,27 @@ import RoomList from "@/components/RoomList";
 import UsernameDialog from "@/components/UsernameDialog";
 import { useContext, useState } from "react";
 import CreateRoomDialog from "@/components/CreateRoomDialog";
-import { useNavigation } from "react-router";
+import { useLoaderData, useNavigation } from "react-router";
 import GlobalSpinner from "@/components/GlobalSpinner";
 import UserContext from "@/contexts/UserContext";
+import type { RoomWithParticipantsCount } from "@/types";
+
+interface LoaderData {
+	rooms: RoomWithParticipantsCount[];
+}
 
 function Home() {
 	const { user } = useContext(UserContext);
 	const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(!user);
 	const [createRoomDialogOpen, setCreateRoomDialogOpen] = useState(false);
 
+	const { rooms } = useLoaderData() as LoaderData;
+
 	const navigation = useNavigation();
 	const isNavigating = Boolean(navigation.location);
 
 	if (isNavigating) return <GlobalSpinner />;
 
-	const rooms = [
-		{
-			id: "1",
-			title: "General Chat",
-			creator: "Alice",
-			numberOfParticipants: 5,
-			createdAt: new Date(),
-		},
-		{
-			id: "2",
-			title: "Tech Talk",
-			creator: "Bob",
-			numberOfParticipants: 3,
-			createdAt: new Date("2024-06-21T12:30:00Z"),
-		},
-		{
-			id: "3",
-			title: "Gaming Discussion",
-			creator: "Charlie",
-			numberOfParticipants: 8,
-			createdAt: new Date("2024-06-22T09:15:00Z"),
-		},
-		{
-			id: "4",
-			title: "Music Discussion",
-			creator: "Dave",
-			numberOfParticipants: 6,
-			createdAt: new Date("2024-06-23T11:45:00Z"),
-		},
-	];
-    
 	return (
 		<div className="background-pattern">
 			<div className="container mx-auto flex flex-col min-h-screen">

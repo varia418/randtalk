@@ -6,7 +6,22 @@ import supabase from "./utils/supabase";
 import { TABLES } from "./constants";
 
 export const router = createBrowserRouter([
-	{ path: "/", Component: Home },
+	{
+		path: "/",
+		loader: async () => {
+			const { data } = await supabase
+				.from(TABLES.rooms)
+				.select(`*, users(count)`)
+				.order("createdAt", { ascending: false });
+			const rooms = data?.map((room) => ({
+				...room,
+				numberOfParticipants: room.users?.[0]?.count || 0,
+			}));
+			console.log(rooms);
+			return { rooms };
+		},
+		Component: Home,
+	},
 	{
 		path: "/room/:roomId",
 		loader: async ({ params }) => {
