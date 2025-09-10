@@ -17,7 +17,6 @@ export const router = createBrowserRouter([
 				...room,
 				numberOfParticipants: room.users?.[0]?.count || 0,
 			}));
-			console.log(rooms);
 			return { rooms };
 		},
 		Component: Home,
