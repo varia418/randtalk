@@ -15,7 +15,7 @@ import UserContext from "@/contexts/UserContext";
 import supabase from "@/utils/supabase";
 import { TABLES } from "@/constants";
 
-function ChatRoom({
+function RoomCard({
 	id,
 	title,
 	creator,
@@ -32,7 +32,7 @@ function ChatRoom({
 			.from(TABLES.users)
 			.update({ id: user.id, roomId: id })
 			.eq("id", user.id)
-            .select()
+			.select()
 			.single();
 
 		if (error) {
@@ -75,4 +75,4 @@ function ChatRoom({
 	);
 }
 
-export default ChatRoom;
+export default RoomCard;
