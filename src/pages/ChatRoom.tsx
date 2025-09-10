@@ -58,7 +58,7 @@ function ChatRoom() {
 				</div>
 			</div>
 			<div className="border p-2">
-				<ChatInputBar />
+				<ChatInputBar room={room} />
 			</div>
 			<div className="border">
 				<div className="flex items-center justify-center gap-2 p-2">
