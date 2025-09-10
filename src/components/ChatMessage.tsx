@@ -6,7 +6,7 @@ function ChatMessage({ content, sender, createdAt }: Tables<"messages">) {
 			<div className="flex gap-2 items-baseline">
 				<span className="font-bold text-primary">{sender}</span>
 				<span className="text-sm text-slate-500 ">
-					{createdAt.toLocaleString()}
+					{new Date(createdAt).toLocaleString()}
 				</span>
 			</div>
 			<p>{content}</p>
