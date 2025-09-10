@@ -9,7 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Clock, LogIn, User, Users } from "lucide-react";
 import TimeAgo from "react-timeago";
 import type { RoomWithParticipantsCount } from "@/types";
-import { NavLink } from "react-router";
+import { useNavigate } from "react-router";
+import { useContext } from "react";
+import UserContext from "@/contexts/UserContext";
+import supabase from "@/utils/supabase";
+import { TABLES } from "@/constants";
 
 function ChatRoom({
 	id,
@@ -18,6 +22,26 @@ function ChatRoom({
 	numberOfParticipants,
 	createdAt,
 }: RoomWithParticipantsCount) {
+	const { user, setUser } = useContext(UserContext);
+	const navigate = useNavigate();
+
+	async function joinRoom() {
+		if (!user) return;
+
+		const { error } = await supabase
+			.from(TABLES.users)
+			.update({ id: user.id, roomId: id })
+			.eq("id", user.id);
+
+		if (error) {
+			console.log(error);
+			return;
+		}
+
+		setUser({ ...user, roomId: id });
+		navigate(`/room/${id}`);
+	}
+
 	return (
 		<Card className="gap-0">
 			<CardHeader>
@@ -40,12 +64,10 @@ function ChatRoom({
 				</div>
 			</CardContent>
 			<CardFooter className="mt-4">
-				<NavLink to={`/room/${id}`} end>
-					<Button>
-						<LogIn />
-						Join Room
-					</Button>
-				</NavLink>
+				<Button onClick={joinRoom}>
+					<LogIn />
+					Join Room
+				</Button>
 			</CardFooter>
 		</Card>
 	);

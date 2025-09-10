@@ -14,7 +14,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import supabase from "@/utils/supabase";
 import { v4 as uuidv4 } from "uuid";
-import { SESSION_KEYS, TABLES } from "@/constants";
+import { TABLES } from "@/constants";
 import UserContext from "@/contexts/UserContext";
 import { useContext } from "react";
 
@@ -43,34 +43,18 @@ function UsernameDialog({
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const username = values.username.trim();
 
-		let result;
-		if (!user) {
-			// create a user
-			const user = { id: uuidv4(), displayName: username };
-			result = await supabase
-				.from(TABLES.users)
-				.insert(user)
-				.select()
-				.single();
-		} else {
-			// update existing user
-			result = await supabase
-				.from(TABLES.users)
-				.upsert({ id: user.id, displayName: username })
-				.select()
-				.single();
-		}
+		const { data, error } = await supabase
+			.from(TABLES.users)
+			.upsert({ id: user?.id || uuidv4(), displayName: username })
+			.select()
+			.single();
 
-		if (result.data) {
-			sessionStorage.setItem(
-				SESSION_KEYS.user,
-				JSON.stringify(result.data)
-			);
-			setUser(result.data);
-		} else if (result.error) {
-			console.log(result.error);
+		if (data) {
+			setUser(data);
+		} else if (error) {
+			console.log(error);
 			setUser(null);
-			alert(result.error.message);
+			alert(error.message);
 		}
 
 		setOpen(false);
