@@ -3,20 +3,15 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import RoomList from "@/components/RoomList";
 import UsernameDialog from "@/components/UsernameDialog";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import CreateRoomDialog from "@/components/CreateRoomDialog";
 import { useNavigation } from "react-router";
 import GlobalSpinner from "@/components/GlobalSpinner";
-import { SESSION_KEYS } from "@/constants";
+import UserContext from "@/contexts/UserContext";
 
 function Home() {
-	const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(() => {
-		// open dialog if username is not existed
-		const user = JSON.parse(
-			sessionStorage.getItem(SESSION_KEYS.user) || "null"
-		);
-		return !user;
-	});
+	const { user } = useContext(UserContext);
+	const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(!user);
 	const [createRoomDialogOpen, setCreateRoomDialogOpen] = useState(false);
 
 	const navigation = useNavigation();
@@ -54,6 +49,7 @@ function Home() {
 			createdAt: new Date("2024-06-23T11:45:00Z"),
 		},
 	];
+    
 	return (
 		<div className="background-pattern">
 			<div className="container mx-auto flex flex-col min-h-screen">

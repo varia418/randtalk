@@ -12,6 +12,11 @@ import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { v4 as uuidv4 } from "uuid";
+import { TABLES } from "@/constants";
+import supabase from "@/utils/supabase";
+import UserContext from "@/contexts/UserContext";
+import { useContext } from "react";
 
 const formSchema = z.object({
 	title: z.string().trim().nonempty({ message: "Title is required." }),
@@ -24,6 +29,7 @@ function CreateRoomDialog({
 	open: boolean;
 	setOpen: (open: boolean) => void;
 }) {
+	const { user } = useContext(UserContext);
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -31,8 +37,24 @@ function CreateRoomDialog({
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values);
+	async function onSubmit(values: z.infer<typeof formSchema>) {
+		if (!user) {
+			alert("There was an error. Please refresh the page.");
+			return;
+		}
+
+		const room = {
+			id: uuidv4(),
+			title: values.title.trim(),
+			creator: user.displayName,
+		};
+		const { error } = await supabase.from(TABLES.rooms).insert(room);
+
+		if (error) {
+			console.log(error);
+			alert("There was an error creating the room. Please try again.");
+		}
+
 		setOpen(false);
 	}
 

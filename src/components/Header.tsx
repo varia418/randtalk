@@ -6,16 +6,15 @@ import {
 	DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
-import { SESSION_KEYS } from "@/constants";
+import { useContext } from "react";
+import UserContext from "@/contexts/UserContext";
 
 function Header({
 	setIsUsernameDialogOpen,
 }: {
 	setIsUsernameDialogOpen: (open: boolean) => void;
 }) {
-	const user = JSON.parse(
-		sessionStorage.getItem(SESSION_KEYS.user) || "null"
-	);
+	const { user } = useContext(UserContext);
 
 	const openUsernameDialog = () => {
 		setIsUsernameDialogOpen(true);

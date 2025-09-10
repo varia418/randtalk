@@ -15,6 +15,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import supabase from "@/utils/supabase";
 import { v4 as uuidv4 } from "uuid";
 import { SESSION_KEYS, TABLES } from "@/constants";
+import UserContext from "@/contexts/UserContext";
+import { useContext } from "react";
 
 const formSchema = z.object({
 	username: z.string().trim().min(2, {
@@ -29,6 +31,8 @@ function UsernameDialog({
 	open: boolean;
 	setOpen: (open: boolean) => void;
 }) {
+	const { user, setUser } = useContext(UserContext);
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -38,9 +42,6 @@ function UsernameDialog({
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const username = values.username.trim();
-		const user = JSON.parse(
-			sessionStorage.getItem(SESSION_KEYS.user) || "null"
-		);
 
 		let result;
 		if (!user) {
@@ -60,12 +61,15 @@ function UsernameDialog({
 				.single();
 		}
 
-		console.log(result);
-
-		if (!result.error) {
-			sessionStorage.setItem(SESSION_KEYS.user, JSON.stringify(result.data));
-		} else {
+		if (result.data) {
+			sessionStorage.setItem(
+				SESSION_KEYS.user,
+				JSON.stringify(result.data)
+			);
+			setUser(result.data);
+		} else if (result.error) {
 			console.log(result.error);
+			setUser(null);
 			alert(result.error.message);
 		}
 
@@ -73,16 +77,9 @@ function UsernameDialog({
 	}
 
 	function handleOpenChange(open: boolean) {
-		console.log(open);
-		if (!open) {
-			const user = JSON.parse(sessionStorage.getItem(SESSION_KEYS.user) || "null");
-			const username = user?.displayName;
-			try {
-				formSchema.parse({ username });
-			} catch {
-				alert("You must set a valid username to proceed.");
-				return;
-			}
+		if (!open && !user) {
+			alert("You must set a valid username to proceed.");
+			return;
 		}
 
 		setOpen(open);
