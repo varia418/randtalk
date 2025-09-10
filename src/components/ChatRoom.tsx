@@ -28,17 +28,19 @@ function ChatRoom({
 	async function joinRoom() {
 		if (!user) return;
 
-		const { error } = await supabase
+		const { data, error } = await supabase
 			.from(TABLES.users)
 			.update({ id: user.id, roomId: id })
-			.eq("id", user.id);
+			.eq("id", user.id)
+            .select()
+			.single();
 
 		if (error) {
 			console.log(error);
 			return;
 		}
 
-		setUser({ ...user, roomId: id });
+		setUser(data);
 		navigate(`/room/${id}`);
 	}
 
