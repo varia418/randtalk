@@ -37,22 +37,28 @@ export type Database = {
       }
       messages: {
         Row: {
-          content: string
+          content: string | null
           createdAt: string
+          fileName: string | null
+          fileUrl: string | null
           id: string
           roomId: string
           sender: string
         }
         Insert: {
-          content: string
+          content?: string | null
           createdAt?: string
+          fileName?: string | null
+          fileUrl?: string | null
           id?: string
           roomId: string
           sender: string
         }
         Update: {
-          content?: string
+          content?: string | null
           createdAt?: string
+          fileName?: string | null
+          fileUrl?: string | null
           id?: string
           roomId?: string
           sender?: string

@@ -4,8 +4,10 @@ import { TABLES } from "@/constants";
 import type { PresenceUser } from "@/types";
 import type { Tables } from "@/types/database.types";
 import supabase from "@/utils/supabase";
+import { RealtimeChannel } from "@supabase/supabase-js";
 import { useCallback, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { uploadFile, getFileUrl } from "@/utils/storage";
 
 interface UseRealtimeChatProps {
 	roomId: string;
@@ -17,9 +19,7 @@ const EVENT_MESSAGE_TYPE = "message";
 export function useRealtimeChat({ roomId, user }: UseRealtimeChatProps) {
 	const [messages, setMessages] = useState<Tables<"messages">[]>([]);
 	const [users, setUsers] = useState<PresenceUser[]>([]);
-	const [channel, setChannel] = useState<ReturnType<
-		typeof supabase.channel
-	> | null>(null);
+	const [channel, setChannel] = useState<RealtimeChannel | null>(null);
 	const [isConnected, setIsConnected] = useState(false);
 
 	useEffect(() => {
@@ -67,8 +67,16 @@ export function useRealtimeChat({ roomId, user }: UseRealtimeChatProps) {
 	}, [roomId, user]);
 
 	const sendMessage = useCallback(
-		async (content: string) => {
+		async (content: string, file: File | null = null) => {
 			if (!channel || !isConnected) return;
+
+			let fileUrl: string | null = null;
+			let fileName: string | null = null;
+			if (file) {
+				const data = await uploadFile(file);
+				fileUrl = getFileUrl(data.path);
+				fileName = file.name;
+			}
 
 			const message: Tables<"messages"> = {
 				id: uuidv4(),
@@ -76,6 +84,8 @@ export function useRealtimeChat({ roomId, user }: UseRealtimeChatProps) {
 				sender: user.displayName,
 				roomId: roomId,
 				createdAt: new Date().toISOString(),
+				fileUrl,
+				fileName,
 			};
 
 			const { error } = await supabase

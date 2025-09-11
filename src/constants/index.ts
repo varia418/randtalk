@@ -8,3 +8,5 @@ export const TABLES = {
 export const SESSION_KEYS = {
 	user: "user",
 } as const;
+
+export const BUCKET_NAME = "files";
