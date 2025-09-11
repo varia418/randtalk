@@ -17,6 +17,7 @@ import { TABLES } from "@/constants";
 import supabase from "@/utils/supabase";
 import UserContext from "@/contexts/UserContext";
 import { useContext } from "react";
+import { useNavigate } from "react-router";
 
 const formSchema = z.object({
 	title: z.string().trim().nonempty({ message: "Title is required." }),
@@ -30,6 +31,7 @@ function CreateRoomDialog({
 	setOpen: (open: boolean) => void;
 }) {
 	const { user } = useContext(UserContext);
+	const navigate = useNavigate();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -53,9 +55,11 @@ function CreateRoomDialog({
 		if (error) {
 			console.log(error);
 			alert("There was an error creating the room. Please try again.");
+			return;
 		}
 
 		setOpen(false);
+		navigate(`/room/${room.id}`);
 	}
 
 	return (
