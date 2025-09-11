@@ -4,9 +4,11 @@ import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import UserList from "@/components/UserList";
 import { LogOut, Mic, MicOff, Video, VideoOff } from "lucide-react";
-import { useState } from "react";
-import { useLoaderData } from "react-router";
+import { useContext, useMemo, useState } from "react";
+import { useLoaderData, useNavigate } from "react-router";
 import { type Tables } from "@/types/database.types";
+import { useRealtimeChat } from "@/hooks/useRealtineChat";
+import UserContext from "@/contexts/UserContext";
 
 type LoaderData = {
 	room: Tables<"chat_rooms"> | null;
@@ -15,14 +17,38 @@ type LoaderData = {
 };
 
 function ChatRoom() {
+	const { user } = useContext(UserContext);
 	const [isMuted, setIsMuted] = useState(false);
 	const [isVideoOff, setIsVideoOff] = useState(false);
 	const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
 		useState(false);
-	const { room, users, messages } = useLoaderData() as LoaderData;
+	const navigate = useNavigate();
+	const {
+		room,
+		users: initialUsers,
+		messages: initialMessages,
+	} = useLoaderData() as LoaderData;
+	const { messages: realtimeMessages, sendMessage } = useRealtimeChat({
+		roomId: room?.id || "",
+		username: user?.displayName || "User",
+	});
 	const cameras = ["Camera 1", "Camera 2", "Camera 3"];
 
-	if (!room) return null;
+	const allUsers = [...initialUsers];
+	const allMessages = useMemo(
+		() =>
+			[...initialMessages, ...realtimeMessages].sort(
+				(a, b) =>
+					new Date(b.createdAt).getTime() -
+					new Date(a.createdAt).getTime()
+			),
+		[initialMessages, realtimeMessages]
+	);
+
+	if (!room) {
+		navigate("/");
+		return;
+	}
 
 	return (
 		<div className="h-screen grid grid-rows-[50px_minmax(300px,1fr)_fit-content(0)] grid-cols-[200px_minmax(400px,1fr)_400px]">
@@ -36,11 +62,11 @@ function ChatRoom() {
 				<h1 className="text-2xl truncate">Cameras</h1>
 			</div>
 			<div className="border row-span-2 overflow-auto">
-				<UserList users={users} />
+				<UserList users={allUsers} />
 			</div>
 			<div className="border pb-2">
 				<ul className="flex flex-col-reverse overflow-auto h-full">
-					{messages.map((message: Tables<"messages">) => (
+					{allMessages.map((message: Tables<"messages">) => (
 						<ChatMessage key={message.id} {...message} />
 					))}
 				</ul>
@@ -58,7 +84,7 @@ function ChatRoom() {
 				</div>
 			</div>
 			<div className="border p-2">
-				<ChatInputBar room={room} />
+				<ChatInputBar sendMessage={sendMessage} />
 			</div>
 			<div className="border">
 				<div className="flex items-center justify-center gap-2 p-2">

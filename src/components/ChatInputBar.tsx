@@ -11,14 +11,8 @@ import {
 	EmojiPickerSearch,
 } from "./ui/emoji-picker";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FileUp, SendHorizontal, Smile } from "lucide-react";
-import UserContext from "@/contexts/UserContext";
-import supabase from "@/utils/supabase";
-import { TABLES } from "@/constants";
-import { v4 as uuidv4 } from "uuid";
-import type { Room } from "@/types";
-import { useRevalidator } from "react-router";
 
 const formSchema = z.object({
 	message: z
@@ -28,10 +22,12 @@ const formSchema = z.object({
 		.max(500, "Message must be at most 500 characters long."),
 });
 
-function ChatInputBar({ room }: { room: Room }) {
+function ChatInputBar({
+	sendMessage,
+}: {
+	sendMessage: (message: string) => void;
+}) {
 	const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
-	const { user } = useContext(UserContext);
-	const revalidator = useRevalidator();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -42,24 +38,8 @@ function ChatInputBar({ room }: { room: Room }) {
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const message = values.message.trim();
-		const { data, error } = await supabase
-			.from(TABLES.messages)
-			.insert({
-				id: uuidv4(),
-				content: message,
-				sender: user?.displayName || "Unknown",
-				roomId: room.id,
-			})
-			.select()
-			.single();
-
-		if (error) {
-			console.log(error);
-		} else {
-			console.log("Message sent:", data);
-			form.reset();
-			revalidator.revalidate();
-		}
+		sendMessage(message);
+		form.reset();
 	}
 
 	return (
