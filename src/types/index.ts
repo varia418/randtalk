@@ -6,3 +6,7 @@ export type Room = Tables<"chat_rooms">;
 export type Message = Tables<"messages">;
 
 export type RoomWithParticipantsCount = Room & { numberOfParticipants: number };
+export type PresenceUser = Tables<"users"> & {
+	micMuted: boolean;
+	videoOff: boolean;
+};

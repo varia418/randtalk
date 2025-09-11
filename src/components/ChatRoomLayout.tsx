@@ -11,26 +11,28 @@ import ConfirmationDialog from "./ConfirmationDialog";
 function ChatRoomLayout({
 	room,
 	user,
-	initialUsers,
 	initialMessages,
 }: {
 	room: Tables<"chat_rooms">;
 	user: Tables<"users">;
-	initialUsers: Tables<"users">[];
 	initialMessages: Tables<"messages">[];
 }) {
-	const [isMuted, setIsMuted] = useState(false);
-	const [isVideoOff, setIsVideoOff] = useState(false);
+	const [isMuted, setIsMuted] = useState(true);
+	const [isVideoOff, setIsVideoOff] = useState(true);
 	const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
 		useState(false);
 
-	const { messages: realtimeMessages, sendMessage } = useRealtimeChat({
+	const {
+		messages: realtimeMessages,
+		sendMessage,
+		users,
+		updatePresence,
+	} = useRealtimeChat({
 		roomId: room.id,
 		user: user,
 	});
 	const cameras = ["Camera 1", "Camera 2", "Camera 3"];
 
-	const allUsers = [...initialUsers];
 	const allMessages = useMemo(
 		() =>
 			[...initialMessages, ...realtimeMessages].sort(
@@ -40,6 +42,18 @@ function ChatRoomLayout({
 			),
 		[initialMessages, realtimeMessages]
 	);
+
+	const toggleMute = () => {
+		const newState = !isMuted;
+		setIsMuted(newState);
+		updatePresence(newState, isVideoOff);
+	};
+
+	const toggleVideo = () => {
+		const newState = !isVideoOff;
+		setIsVideoOff(newState);
+		updatePresence(isMuted, newState);
+	};
 
 	return (
 		<div className="h-screen grid grid-rows-[50px_minmax(300px,1fr)_fit-content(0)] grid-cols-[200px_minmax(400px,1fr)_400px]">
@@ -53,7 +67,7 @@ function ChatRoomLayout({
 				<h1 className="text-2xl truncate">Cameras</h1>
 			</div>
 			<div className="border row-span-2 overflow-auto">
-				<UserList users={allUsers} />
+				<UserList users={users} />
 			</div>
 			<div className="border pb-2">
 				<ul className="flex flex-col-reverse overflow-auto h-full">
@@ -82,14 +96,14 @@ function ChatRoomLayout({
 					<Button
 						size="icon"
 						variant={"outline"}
-						onClick={() => setIsMuted(!isMuted)}
+						onClick={toggleMute}
 					>
 						{isMuted ? <MicOff /> : <Mic />}
 					</Button>
 					<Button
 						size="icon"
 						variant={"outline"}
-						onClick={() => setIsVideoOff(!isVideoOff)}
+						onClick={toggleVideo}
 					>
 						{isVideoOff ? <VideoOff /> : <Video />}
 					</Button>

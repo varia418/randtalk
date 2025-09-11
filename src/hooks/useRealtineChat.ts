@@ -1,6 +1,7 @@
 "use client";
 
 import { TABLES } from "@/constants";
+import type { PresenceUser } from "@/types";
 import type { Tables } from "@/types/database.types";
 import supabase from "@/utils/supabase";
 import { useCallback, useEffect, useState } from "react";
@@ -15,13 +16,18 @@ const EVENT_MESSAGE_TYPE = "message";
 
 export function useRealtimeChat({ roomId, user }: UseRealtimeChatProps) {
 	const [messages, setMessages] = useState<Tables<"messages">[]>([]);
+	const [users, setUsers] = useState<PresenceUser[]>([]);
 	const [channel, setChannel] = useState<ReturnType<
 		typeof supabase.channel
 	> | null>(null);
 	const [isConnected, setIsConnected] = useState(false);
 
 	useEffect(() => {
-		const newChannel = supabase.channel(roomId);
+		const newChannel = supabase.channel(roomId, {
+			config: {
+				presence: { key: user.id },
+			},
+		});
 
 		newChannel
 			.on("broadcast", { event: EVENT_MESSAGE_TYPE }, (payload) => {
@@ -31,26 +37,25 @@ export function useRealtimeChat({ roomId, user }: UseRealtimeChatProps) {
 				]);
 			})
 			.on("presence", { event: "sync" }, () => {
-				const presence = newChannel.presenceState();
-				console.log("Current presence state:", presence);
+				const state = newChannel.presenceState();
+				const onlineUsers: PresenceUser[] = Object.values(state)
+					.flat()
+					.map((presence: any) => ({
+						...presence.user,
+						micMuted: presence.micMuted,
+						videoOff: presence.videoOff,
+					}));
+				setUsers(onlineUsers);
 			})
 			.subscribe(async (status) => {
 				if (status === "SUBSCRIBED") {
 					setIsConnected(true);
 
-					const userState = {
-						userId: user.id,
-						isMicMuted: true,
-						isVideoOff: true,
-					};
-
-					const presenceTrackStatus = await newChannel.track(
-						userState
-					);
-					console.log(
-						"🚀 ~ useRealtimeChat ~ presenceTrackStatus:",
-						presenceTrackStatus
-					);
+					await newChannel.track({
+						user,
+						micMuted: true,
+						videoOff: true,
+					});
 				}
 			});
 
@@ -92,5 +97,16 @@ export function useRealtimeChat({ roomId, user }: UseRealtimeChatProps) {
 		[channel, isConnected, user, roomId]
 	);
 
-	return { messages, sendMessage, isConnected };
+	const updatePresence = useCallback(
+		async (micMuted: boolean, videoOff: boolean) => {
+			await channel?.track({
+				user,
+				micMuted,
+				videoOff,
+			});
+		},
+		[user, channel]
+	);
+
+	return { messages, sendMessage, users, updatePresence };
 }
