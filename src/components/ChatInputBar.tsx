@@ -87,7 +87,7 @@ function ChatInputBar({
 							render={({ field }) => (
 								<FormItem className="flex-1 flex">
 									<FormControl>
-										<ChatInput variant="unstyled" {...field}>
+										<ChatInput variant="unstyled" {...field} onSubmit={form.handleSubmit(onSubmit)}>
 											<ChatInputTextArea
 												className="max-h-32"
 												placeholder="Type a message..."

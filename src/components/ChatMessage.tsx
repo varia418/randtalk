@@ -5,8 +5,8 @@ function ChatMessage(message: Tables<"messages">) {
 	return (
 		<li className="flex flex-col mx-2 my-1 text-sm break-words">
 			<div className="flex items-center gap-2">
-				<span className="font-bold">{message.sender}</span>
-				<span className="text-xs text-gray-500">
+				<span className="font-bold text-primary">{message.sender}</span>
+				<span className="text-sm text-gray-500">
 					{new Date(message.createdAt).toLocaleString()}
 				</span>
 			</div>
