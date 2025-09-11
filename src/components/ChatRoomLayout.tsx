@@ -1,4 +1,4 @@
-import { useRealtimeChat } from "@/hooks/useRealtineChat";
+import { useRealtimeChat } from "@/hooks/useRealtimeChat";
 import type { Tables } from "@/types/database.types";
 import { useMemo, useState } from "react";
 import UserList from "./UserList";
