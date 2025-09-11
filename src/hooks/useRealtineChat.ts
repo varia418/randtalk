@@ -8,12 +8,12 @@ import { v4 as uuidv4 } from "uuid";
 
 interface UseRealtimeChatProps {
 	roomId: string;
-	username: string;
+	user: Tables<"users">;
 }
 
 const EVENT_MESSAGE_TYPE = "message";
 
-export function useRealtimeChat({ roomId, username }: UseRealtimeChatProps) {
+export function useRealtimeChat({ roomId, user }: UseRealtimeChatProps) {
 	const [messages, setMessages] = useState<Tables<"messages">[]>([]);
 	const [channel, setChannel] = useState<ReturnType<
 		typeof supabase.channel
@@ -30,9 +30,27 @@ export function useRealtimeChat({ roomId, username }: UseRealtimeChatProps) {
 					payload.payload as Tables<"messages">,
 				]);
 			})
+			.on("presence", { event: "sync" }, () => {
+				const presence = newChannel.presenceState();
+				console.log("Current presence state:", presence);
+			})
 			.subscribe(async (status) => {
 				if (status === "SUBSCRIBED") {
 					setIsConnected(true);
+
+					const userState = {
+						userId: user.id,
+						isMicMuted: true,
+						isVideoOff: true,
+					};
+
+					const presenceTrackStatus = await newChannel.track(
+						userState
+					);
+					console.log(
+						"🚀 ~ useRealtimeChat ~ presenceTrackStatus:",
+						presenceTrackStatus
+					);
 				}
 			});
 
@@ -41,7 +59,7 @@ export function useRealtimeChat({ roomId, username }: UseRealtimeChatProps) {
 		return () => {
 			supabase.removeChannel(newChannel);
 		};
-	}, [roomId, username]);
+	}, [roomId, user]);
 
 	const sendMessage = useCallback(
 		async (content: string) => {
@@ -50,7 +68,7 @@ export function useRealtimeChat({ roomId, username }: UseRealtimeChatProps) {
 			const message: Tables<"messages"> = {
 				id: uuidv4(),
 				content,
-				sender: username,
+				sender: user.displayName,
 				roomId: roomId,
 				createdAt: new Date().toISOString(),
 			};
@@ -71,7 +89,7 @@ export function useRealtimeChat({ roomId, username }: UseRealtimeChatProps) {
 				payload: message,
 			});
 		},
-		[channel, isConnected, username, roomId]
+		[channel, isConnected, user, roomId]
 	);
 
 	return { messages, sendMessage, isConnected };
