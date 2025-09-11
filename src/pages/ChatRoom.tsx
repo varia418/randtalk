@@ -6,7 +6,6 @@ import ChatRoomLayout from "@/components/ChatRoomLayout";
 
 type LoaderData = {
 	room: Tables<"chat_rooms"> | null;
-	users: Tables<"users">[];
 	messages: Tables<"messages">[];
 };
 
@@ -14,11 +13,7 @@ function ChatRoom() {
 	const { user } = useContext(UserContext);
 
 	const navigate = useNavigate();
-	const {
-		room,
-		users: initialUsers,
-		messages: initialMessages,
-	} = useLoaderData() as LoaderData;
+	const { room, messages: initialMessages } = useLoaderData() as LoaderData;
 
 	if (!room || !user) {
 		navigate("/");
@@ -29,7 +24,6 @@ function ChatRoom() {
 		<ChatRoomLayout
 			room={room}
 			user={user}
-			initialUsers={initialUsers}
 			initialMessages={initialMessages}
 		/>
 	);

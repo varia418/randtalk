@@ -40,11 +40,6 @@ export const router = createBrowserRouter([
 				.eq("id", params.roomId)
 				.single();
 
-			const { data: users } = await supabase
-				.from(TABLES.users)
-				.select()
-				.eq("roomId", params.roomId);
-
 			const { data: messages } = await supabase
 				.from(TABLES.messages)
 				.select()
@@ -53,7 +48,6 @@ export const router = createBrowserRouter([
 
 			return {
 				room,
-				users,
 				messages,
 			};
 		},
