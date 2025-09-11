@@ -8,14 +8,23 @@ import { TABLES } from "./constants";
 export const router = createBrowserRouter([
 	{
 		path: "/",
-		loader: async () => {
+		loader: async ({ request }) => {
+			const url = new URL(request.url);
+			const sort = url.searchParams.get("sort") || "recent";
+
 			const { data } = await supabase
-				.from(TABLES.rooms)
-				.select(`*, users(count)`)
-				.order("createdAt", { ascending: false });
+				.from(TABLES.roomsWithParticipantsCount)
+				.select("*")
+				.order(
+					sort === "popular" ? "participants_count" : "createdAt",
+					{
+						ascending: false,
+					}
+				);
+
 			const rooms = data?.map((room) => ({
 				...room,
-				numberOfParticipants: room.users?.[0]?.count || 0,
+				numberOfParticipants: room.participants_count,
 			}));
 			return { rooms };
 		},

@@ -1,11 +1,10 @@
-const TABLES = {
-	users: "users",
+export const TABLES = {
 	rooms: "chat_rooms",
 	messages: "messages",
+	users: "users",
+	roomsWithParticipantsCount: "chat_rooms_with_user_count",
 } as const;
 
-const SESSION_KEYS = {
+export const SESSION_KEYS = {
 	user: "user",
-};
-
-export { TABLES, SESSION_KEYS };
+} as const;

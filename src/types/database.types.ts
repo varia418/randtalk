@@ -65,6 +65,13 @@ export type Database = {
             referencedRelation: "chat_rooms"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "messages_room_id_fkey"
+            columns: ["roomId"]
+            isOneToOne: false
+            referencedRelation: "chat_rooms_with_user_count"
+            referencedColumns: ["id"]
+          },
         ]
       }
       users: {
@@ -91,11 +98,27 @@ export type Database = {
             referencedRelation: "chat_rooms"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "users_room_id_fkey"
+            columns: ["roomId"]
+            isOneToOne: false
+            referencedRelation: "chat_rooms_with_user_count"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      chat_rooms_with_user_count: {
+        Row: {
+          createdAt: string | null
+          creator: string | null
+          id: string | null
+          participants_count: number | null
+          title: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

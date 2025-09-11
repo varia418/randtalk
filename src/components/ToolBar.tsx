@@ -7,14 +7,20 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useNavigate } from "react-router";
 
 function ToolBar({
 	setCreateRoomDialogOpen,
+	sorting,
 }: {
 	setCreateRoomDialogOpen: (open: boolean) => void;
+	sorting: string;
 }) {
-	const [sorting, setSorting] = useState("most-recent");
+	const navigate = useNavigate();
+
+	function onSortingChange(value: string) {
+		navigate(`/?sort=${value}`);
+	}
 
 	return (
 		<div className="flex mt-10 gap-4">
@@ -23,15 +29,13 @@ function ToolBar({
 				Create a Room
 			</Button>
 			<div className="flex gap-4 ml-auto">
-				<Select value={sorting} onValueChange={setSorting}>
+				<Select value={sorting} onValueChange={onSortingChange}>
 					<SelectTrigger className="w-[140px]">
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value="most-recent">Most recent</SelectItem>
-						<SelectItem value="most-popular">
-							Most popular
-						</SelectItem>
+						<SelectItem value="recent">Most recent</SelectItem>
+						<SelectItem value="popular">Most popular</SelectItem>
 					</SelectContent>
 				</Select>
 				{/* <div className="flex w-full max-w-sm items-center space-x-2">

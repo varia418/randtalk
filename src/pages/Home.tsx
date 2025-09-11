@@ -5,7 +5,7 @@ import RoomList from "@/components/RoomList";
 import UsernameDialog from "@/components/UsernameDialog";
 import { useContext, useState } from "react";
 import CreateRoomDialog from "@/components/CreateRoomDialog";
-import { useLoaderData, useNavigation } from "react-router";
+import { useLoaderData, useNavigation, useSearchParams } from "react-router";
 import GlobalSpinner from "@/components/GlobalSpinner";
 import UserContext from "@/contexts/UserContext";
 import type { RoomWithParticipantsCount } from "@/types";
@@ -18,6 +18,9 @@ function Home() {
 	const { user } = useContext(UserContext);
 	const [isUsernameDialogOpen, setIsUsernameDialogOpen] = useState(!user);
 	const [createRoomDialogOpen, setCreateRoomDialogOpen] = useState(false);
+	const [searchParams] = useSearchParams();
+
+	const sorting = searchParams.get("sort") || "recent";
 
 	const { rooms } = useLoaderData() as LoaderData;
 
@@ -36,7 +39,10 @@ function Home() {
 				<p className="text-center text-xl">
 					No Sign-Up. Just Start Talking.
 				</p>
-				<ToolBar setCreateRoomDialogOpen={setCreateRoomDialogOpen} />
+				<ToolBar
+					setCreateRoomDialogOpen={setCreateRoomDialogOpen}
+					sorting={sorting}
+				/>
 				<RoomList rooms={rooms} />
 				<Footer />
 				<UsernameDialog
