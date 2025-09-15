@@ -1,69 +1,55 @@
-# React + TypeScript + Vite
+# RandTalk
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  <img src="/public/randtalk-logo.png" alt="RandTalk Logo" width="200"/>
+</p>
 
-Currently, two official plugins are available:
+<p align="center">
+  A real-time chat application built with modern web technologies.
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+-   **Real-time Messaging**: Instantly send and receive messages in chat rooms.
+-   **Multiple Rooms**: Create and join different chat rooms.
+-   **User Presence**: See who is currently online in a chat room.
+-   **Username Selection**: Users can set their own username.
+-   **Emoji Picker**: Easily add emojis to your messages.
+-   **File Sharing**: Share files with other users in the chat.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+-   **Frontend**: [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vitejs.dev/)
+-   **Backend & Real-time**: [Supabase](https://supabase.io/)
+-   **Styling**: [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)
+-   **Forms**: [React Hook Form](https://react-hook-form.com/) with [Zod](https://zod.dev/) for validation.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Completed features
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Basic requirements
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+-   [x] Create a chat room feature.
+-   [x] Display a list of chat rooms.
+-   [x] Implement the ability to join chat rooms.
+-   [x] Enable chat functionality within the rooms.
+-   [x] Deploy the application to a publicly accessible platform.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Advanced Requirements
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+-   [x] Implement file transfer functionality within the chat rooms.
+-   [ ] Enable video conferencing using WebRTC.
+
+## Known Issues and Limitations
+
+-   Number of participants in a room might not be accurate.
+-   Cannot download files from the chat room.
+
+## Future Improvements
+
+-   **Full User Authentication**: Implement a secure authentication system with email/password and/or OAuth providers to manage user accounts.
+-   **Direct Messaging**: Add functionality for users to initiate private one-on-one conversations.
+-   **Typing Indicators & Read Receipts**: Enhance the user experience by showing when other users are typing and whether messages have been read.
+-   **User Profiles**: Allow users to create profiles with avatars, status messages, and other information.
+-   **Advanced Moderation Tools**: Introduce roles (admin, moderator) with privileges to manage chat rooms and users effectively.
+-   **Search Functionality**: Implement a feature to search through message history within rooms.
+-   **Notifications**: Add browser notifications to alert users of new messages when the application is in the background.
